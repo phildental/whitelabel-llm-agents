@@ -1,4 +1,4 @@
 /.llmvenv/
-/pickles/
+/pickles
 /.vscode/
 .env
