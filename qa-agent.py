@@ -11,5 +11,5 @@ api_key = os.getenv("OPENAI_API_KEY")
 llm = OpenAI(temperature=0.5)
 conversation = ConversationChain(llm=llm, verbose=True)
 
-output = conversation.predict(input="Set a Menu Item active using Dundas script in Dundas BI. I expect you to send me a code.")
+output = conversation.predict(input="Ask something about anything")
 print(output)

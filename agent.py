@@ -1,9 +1,7 @@
 import streamlit as st
-import numpy as np
 import pickle
-import pandas as pd
+import dotenv
 
-from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
@@ -14,6 +12,8 @@ from langchain.callbacks import get_openai_callback
 from langchain.agents import create_csv_agent
 import os
 import tempfile
+
+dotenv.load_dotenv()
 
 def process_and_store_pickle(file, embeddings_folder):
     file_type = file.type.split('/')[1]
@@ -49,12 +49,11 @@ def process_and_store_pickle(file, embeddings_folder):
         pass
 
 def main():
-    load_dotenv()
     st.set_page_config(page_title="Ask me something 🧞‍♂️")
     st.header("Ask me anything about the uploaded file 🧞‍♂️")
 
     file = st.file_uploader("Upload a file", type=("pdf", "csv"))
-    embeddings_folder = "/Users/felipemarques/Documents/GitHub/custom-llm/pickles"
+    embeddings_folder = "/Users/felipemarques/Documents/GitHub/whitelabel-llm-agents/pickles"
 
     llm = OpenAI(temperature=0)  # Define llm outside the file upload condition
 
