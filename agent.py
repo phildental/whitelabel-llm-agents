@@ -52,15 +52,19 @@ def main():
     st.set_page_config(page_title="Ask me something 🧞‍♂️")
     st.header("Ask me anything about the uploaded file 🧞‍♂️")
 
-    file = st.file_uploader("Upload a file", type=("pdf", "csv"))
+    file = st.file_uploader("Upload a file", type=("pdf", "csv", "pkl"))
     embeddings_folder = "/Users/felipemarques/Documents/GitHub/whitelabel-llm-agents/pickles"
 
     llm = OpenAI(temperature=0)  # Define llm outside the file upload condition
 
     # Process and store pickle button
     if file is not None:
-        if st.button("Process and Store as Pickle"):
-            process_and_store_pickle(file, embeddings_folder)
+        file_type = file.type.split('/')[1]
+
+        # Check if file is pickle
+        if file_type == 'pkl':
+            # load and use your pickle file
+            knowledge_base = pickle.load(file)
 
     if file is not None or st.button("Process and Store as Pickle"):
         file_type = file.type.split('/')[1]

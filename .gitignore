@@ -2,3 +2,4 @@
 /pickles/
 /.vscode/
 .env
+.DS_Store

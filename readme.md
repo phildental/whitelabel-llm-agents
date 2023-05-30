@@ -62,11 +62,7 @@ This will open a web browser window. You can upload a file, process it, and star
 
 ### Author
 
-Your Name
-
-### License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+phildental
 
 ### Acknowledgments
 
