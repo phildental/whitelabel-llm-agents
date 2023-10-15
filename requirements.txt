@@ -155,5 +155,4 @@ websocket-client==1.5.1
 widgetsnbextension==4.0.5
 xlrd==2.0.1
 yarl==1.9.2
-yfinance
 zipp==3.15.0
