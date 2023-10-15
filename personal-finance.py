@@ -35,8 +35,8 @@ def main():
         layout="centered"
         )
     
-    st.header("Hi, I am PennyPal! 🧞‍♂️💰")
-    user_question = st.text_input("Ask me a question about your finances.")
+    st.header("Hey Phil! Nice to have you back. 🧞‍♂️💰")
+    user_question = st.text_input("Do you want to ask me a question about your finances?")
     if user_question is not None and user_question != "":
         with get_openai_callback() as cb:
             output = sdf.chat(user_question)
