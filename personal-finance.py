@@ -7,8 +7,6 @@ from pandasai.llm import OpenAI
 from pandasai import SmartDataframe
 from pandasai.helpers.openai_info import get_openai_callback
 from dotenv import load_dotenv
-
-import streamlit as st
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
@@ -70,7 +68,7 @@ df = dfnor[dfnor['hash'] != ""]
 
 
 def main():
-    llm = OpenAI(api_token="sk-HolMxGSt5uDLwnzisUsssl9CoCco8FWcusg3mq5gk", temperature=0)
+    llm = OpenAI(api_token="OPENAI_API_KEY", temperature=0)
     sdf = SmartDataframe(df, config={"llm": llm, "verbose": True, "response_parser": StreamlitResponse, "max_retries": 10})
     st.set_page_config(
         page_title="You Personal Finance Assistant 🧞‍♂️",
