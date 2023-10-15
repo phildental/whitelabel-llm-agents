@@ -68,8 +68,17 @@ df = dfnor[dfnor['hash'] != ""]
 
 
 def main():
-    # ... (your previous code)
-
+    llm = OpenAI(api_token="OPENAI_API_KEY", temperature=0)
+    sdf = SmartDataframe(df, config={"llm": llm, "verbose": True, "response_parser": StreamlitResponse, "max_retries": 10})
+    st.set_page_config(
+        page_title="You Personal Finance Assistant 🧞‍♂️",
+        page_icon=":sales:",
+        layout="centered"
+        )
+    
+    st.header("Hi, I am PennyPal! 🧞‍♂️💰")
+    user_question = st.text_input("Ask me a question about your finances.")
+    
     if user_question is not None and user_question != "":
         with get_openai_callback() as cb:
             output = sdf.chat(user_question)
@@ -93,4 +102,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
