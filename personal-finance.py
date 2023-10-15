@@ -28,7 +28,7 @@ df = dfnor[dfnor['hash'] != ""]
 
 def main():
     llm = OpenAI(api_token=OPENAI_API_KEY, temperature=0)
-    sdf = SmartDataframe(df, config={"llm": llm, "enable_cache": True, "verbose": True, "response_parser": StreamlitResponse, "max_retries": 10})
+    sdf = SmartDataframe(df, config={"llm": llm, "verbose": True, "response_parser": StreamlitResponse, "max_retries": 10})
     st.set_page_config(
         page_title="You Personal Finance Assistant 🧞‍♂️",
         page_icon=":sales:",
