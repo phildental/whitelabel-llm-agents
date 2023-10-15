@@ -7,124 +7,14 @@ from pandasai.llm import OpenAI
 from pandasai import SmartDataframe
 from pandasai.helpers.openai_info import get_openai_callback
 from dotenv import load_dotenv
-from abc import ABC, abstractmethod
-from typing import Any
 
-from pandasai.exceptions import MethodNotImplementedError
+import streamlit as st
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
-
-class IResponseParser(ABC):
-    @abstractmethod
-    def parse(self, result: dict) -> Any:
-        """
-        Parses result from the chat input
-        Args:
-            result (dict): result contains type and value
-        Raises:
-            ValueError: if result is not a dictionary with valid key
-
-        Returns:
-            Any: Returns depending on the user input
-        """
-        raise MethodNotImplementedError
-
-
-class ResponseParser(IResponseParser):
-    _context = None
-
-    def __init__(self, context) -> None:
-        """
-        Initialize the ResponseParser with Context from SmartDataLake
-        Args:
-            context (Context): context contains the config, logger and engine
-        """
-        self._context = context
-
-    def parse(self, result: dict) -> Any:
-        """
-        Parses result from the chat input
-        Args:
-            result (dict): result contains type and value
-        Raises:
-            ValueError: if result is not a dictionary with valid key
-
-        Returns:
-            Any: Returns depending on the user input
-        """
-        if not isinstance(result, dict) or not all(
-            key in result for key in ["type", "value"]
-        ):
-            raise ValueError("Unsupported result format")
-
-        if result["type"] == "dataframe":
-            return self.format_dataframe(result)
-        elif result["type"] == "plot":
-            return self.format_plot(result)
-        else:
-            return self.format_other(result)
-
-    def format_dataframe(self, result: dict) -> Any:
-        """
-        Format dataframe generate against a user query
-        Args:
-            result (dict): result contains type and value
-        Returns:
-            Any: Returns depending on the user input
-        """
-        from ..smart_dataframe import SmartDataframe
-
-        df = result["value"]
-        if self._context.engine == "polars" and polars_imported:
-            import polars as pl
-
-            df = pl.from_pandas(df)
-
-        return SmartDataframe(
-            df,
-            config=self._context._config.__dict__,
-            logger=self._context.logger,
-        )
-
-    def format_plot(self, result: dict) -> Any:
-        """
-        Display matplotlib plot against a user query
-        Args:
-            result (dict): result contains type and value
-        Returns:
-            Any: Returns depending on the user input
-        """
-        import matplotlib.pyplot as plt
-        import matplotlib.image as mpimg
-
-        # Load the image file
-        try:
-            image = mpimg.imread(result["value"])
-        except FileNotFoundError:
-            raise FileNotFoundError(f"The file {result['value']} does not exist.")
-        except OSError:
-            raise ValueError(f"The file {result['value']} is not a valid image file.")
-
-        # Display the image
-        plt.imshow(image)
-        plt.axis("off")
-        plt.show(block=is_running_in_console())
-        plt.close("all")
-
-    def format_other(self, result) -> Any:
-        """
-        Returns the result generated against a user query other than dataframes
-        and plots
-        Args:
-            result (dict): result contains type and value
-        Returns:
-            Any: Returns depending on the user input
-        """
-        return result["value"]
-
-
-class StreamlitResponse(ResponseParser):
-    def __init__(self, context):
-        super().__init__(context)
+class StreamlitResponse:
+    def __init__(self):
+        pass
 
     def format_plot(self, result) -> None:
         """
@@ -132,29 +22,34 @@ class StreamlitResponse(ResponseParser):
         Args:
             result (dict): result contains type and value
         """
-        import matplotlib.pyplot as plt
-        import matplotlib.image as mpimg
-
         # Load the image file
         try:
             image = mpimg.imread(result["value"])
         except FileNotFoundError:
-            raise FileNotFoundError(f"The file {result['value']} does not exist.")
+            st.error(f"The file {result['value']} does not exist.")
+            return
         except OSError:
-            raise ValueError(f"The file {result['value']} is not a valid image file.")
-
-        try:
-            import streamlit as st
-        except ImportError:
-            raise ImportError(
-                "The 'streamlit' module is required to use StreamLit Response. "
-                "Please install it using pip: pip install streamlit"
-            )
+            st.error(f"The file {result['value']} is not a valid image file.")
+            return
 
         # Display the image
         plt.imshow(image)
         fig = plt.gcf()
         st.pyplot(fig)
+
+    def format_dataframe(self, dataframe) -> None:
+        """
+        Display a DataFrame in Streamlit
+        """
+        st.write(dataframe)
+
+    def format_other(self, result) -> None:
+        """
+        Handle other types of outputs in Streamlit
+        """
+        st.write(result)
+
+
 
 
 load_dotenv()
@@ -177,7 +72,7 @@ df = dfnor[dfnor['hash'] != ""]
 def main():
     llm = OpenAI(api_token=OPENAI_API_KEY, temperature=0)
     streamlit_response_instance = StreamlitResponse()
-    sdf = SmartDataframe(df, config={"llm": llm, "enable_cache": False, "verbose": True, "conversational": True, "response_parser": streamlit_response_instance})
+    sdf = SmartDataframe(df, config={"llm": llm, "enable_cache": False, "verbose": True, "conversational": True})
     st.set_page_config(
         page_title="You Personal Finance Assistant 🧞‍♂️",
         page_icon=":sales:",
@@ -189,8 +84,12 @@ def main():
     if user_question is not None and user_question != "":
         with get_openai_callback() as cb:
             output = sdf.chat(user_question)
-            st.write(output)
-            st.write(cb)
+            if output['type'] == 'dataframe':
+                streamlit_response_instance.format_dataframe(output['value'])
+            elif output['type'] == 'plot':
+                streamlit_response_instance.format_plot(output['value'])
+            else:
+                streamlit_response_instance.format_other(output['value'])
 
 if __name__ == '__main__':
     main()
