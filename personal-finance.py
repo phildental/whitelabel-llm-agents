@@ -156,7 +156,6 @@ class StreamlitResponse(ResponseParser):
         fig = plt.gcf()
         st.pyplot(fig)
 
-import StreamlitResponse
 
 load_dotenv()
 GS_API = os.getenv('GS_API')
