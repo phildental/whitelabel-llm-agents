@@ -84,12 +84,16 @@ def main():
     if user_question is not None and user_question != "":
         with get_openai_callback() as cb:
             output = sdf.chat(user_question)
-            if output['type'] == 'dataframe':
-                streamlit_response_instance.format_dataframe(output['value'])
-            elif output['type'] == 'plot':
-                streamlit_response_instance.format_plot(output['value'])
+            if output:
+                # Based on the type of output, you might want to call different format methods
+                if 'type' in output and output['type'] == 'dataframe':
+                    streamlit_response_instance.format_dataframe(output['value'])
+                elif 'type' in output and output['type'] == 'plot':
+                    streamlit_response_instance.format_plot(output['value'])
+                else:
+                    streamlit_response_instance.format_other(output['value'])
             else:
-                streamlit_response_instance.format_other(output['value'])
+                st.write("No output to display.")
 
 if __name__ == '__main__':
     main()
