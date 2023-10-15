@@ -3,3 +3,5 @@
 /.vscode/
 .env
 .DS_Store
+/wlllm/
+pandasai.log
