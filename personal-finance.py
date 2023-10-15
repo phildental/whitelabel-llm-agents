@@ -3,7 +3,6 @@ from pandasai.llm import OpenAI
 from pandasai import SmartDataframe
 import requests
 import streamlit as st
-from pandasai.responses.streamlit_response import StreamlitResponse
 from pandasai.helpers.openai_info import get_openai_callback
 import os
 from dotenv import load_dotenv
