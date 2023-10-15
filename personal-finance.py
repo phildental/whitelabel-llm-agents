@@ -3,6 +3,7 @@ import requests
 import streamlit as st
 import os
 import pandasai
+from pandasai.responses.streamlit_response import StreamlitResponse
 from pandasai.llm import OpenAI
 from pandasai import SmartDataframe
 from pandasai.helpers.openai_info import get_openai_callback
@@ -28,7 +29,7 @@ df = dfnor[dfnor['hash'] != ""]
 
 def main():
     llm = OpenAI(api_token=OPENAI_API_KEY, temperature=0)
-    sdf = SmartDataframe(df, config={"llm": llm, "enable_cache": False, "verbose": True, "conversational": True})
+    sdf = SmartDataframe(df, config={"llm": llm, "enable_cache": False, "verbose": True, "conversational": True, "response_parser": StreamlitResponse})
     st.set_page_config(
         page_title="You Personal Finance Assistant 🧞‍♂️",
         page_icon=":sales:",
