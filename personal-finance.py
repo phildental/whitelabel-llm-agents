@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 import streamlit as st
 import os
+import pandasai
 from pandasai.llm import OpenAI
 from pandasai import SmartDataframe
 from pandasai.helpers.openai_info import get_openai_callback
