@@ -156,7 +156,7 @@ class StreamlitResponse(ResponseParser):
         fig = plt.gcf()
         st.pyplot(fig)
 
-
+from pandasai.responses.streamlit_response import StreamlitResponse
 
 load_dotenv()
 GS_API = os.getenv('GS_API')
