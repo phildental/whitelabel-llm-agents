@@ -27,6 +27,7 @@ df = dfnor[dfnor['hash'] != ""]
 
 
 def main():
+    st.markdown("<h1 style='text-align: center; color: black;'>Hi there! Welcome to PennyPal, your Personal Finance genius 🧞‍♂️💰</h1>", unsafe_allow_html=True)
     llm = OpenAI(api_token=OPENAI_API_KEY, temperature=0)
     sdf = SmartDataframe(df, config={"llm": llm, "verbose": True, "response_parser": StreamlitResponse, "max_retries": 5, "conversational": True, "enable_cache": False})
     st.set_page_config(
@@ -35,7 +36,6 @@ def main():
         layout="centered"
         )
     
-    st.header("Hi there! Welcome to PennyPal, your Personal Finance genius 🧞‍♂️💰")
     user_question = st.text_input("Ask me anything about your personal finance.")
     if user_question is not None and user_question != "":
         with get_openai_callback() as cb:
