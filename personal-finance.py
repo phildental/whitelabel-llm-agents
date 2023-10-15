@@ -25,16 +25,16 @@ dfnor = pd.json_normalize(data)
 #Clear empty rows
 df = dfnor[dfnor['hash'] != ""]
 
+st.set_page_config(
+    page_title="Your Personal Finance Assistant 🧞‍♂️",
+    page_icon=":money_with_wings:",
+    layout="centered"
+)
 
 def main():
-    st.markdown("<h1 style='text-align: center; color: black;'>Hi there! Welcome to PennyPal, your Personal Finance genius 🧞‍♂️💰</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #dcdcdc;'>Hi there! </h1> <h2>Welcome to PennyPal, your Personal Finance genius 🧞‍♂️💰</h2>", unsafe_allow_html=True)
     llm = OpenAI(api_token=OPENAI_API_KEY, temperature=0)
     sdf = SmartDataframe(df, config={"llm": llm, "verbose": True, "response_parser": StreamlitResponse, "max_retries": 5, "conversational": True, "enable_cache": False})
-    st.set_page_config(
-        page_title="You Personal Finance Assistant 🧞‍♂️",
-        page_icon=":sales:",
-        layout="centered"
-        )
     
     user_question = st.text_input("Ask me anything about your personal finance.")
     if user_question is not None and user_question != "":
