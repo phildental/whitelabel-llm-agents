@@ -9,7 +9,6 @@ from pandasai.helpers.openai_info import get_openai_callback
 from dotenv import load_dotenv
 from abc import ABC, abstractmethod
 from typing import Any
-from ..helpers.df_info import polars_imported
 
 from pandasai.exceptions import MethodNotImplementedError
 
