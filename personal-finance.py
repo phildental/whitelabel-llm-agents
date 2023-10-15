@@ -7,8 +7,6 @@ from pandasai.llm import OpenAI
 from pandasai import SmartDataframe
 from pandasai.helpers.openai_info import get_openai_callback
 from dotenv import load_dotenv
-from pandasai.responses.response_parser import ResponseParser
-
 
 
 class StreamlitResponse(ResponseParser):
