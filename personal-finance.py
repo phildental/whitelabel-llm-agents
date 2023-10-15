@@ -4,7 +4,6 @@ import streamlit as st
 import os
 from pandasai.llm import OpenAI
 from pandasai import SmartDataframe
-from pandasai.responses import StreamlitResponse
 from pandasai.helpers.openai_info import get_openai_callback
 from dotenv import load_dotenv
 
