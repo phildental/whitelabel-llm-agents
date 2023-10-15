@@ -68,28 +68,28 @@ df = dfnor[dfnor['hash'] != ""]
 
 
 def main():
-    llm = OpenAI(api_token="OPENAI_API_KEY", temperature=0)
-    sdf = SmartDataframe(df, config={"llm": llm, "verbose": True, "response_parser": StreamlitResponse, "max_retries": 10})
-    st.set_page_config(
-        page_title="You Personal Finance Assistant 🧞‍♂️",
-        page_icon=":sales:",
-        layout="centered"
-        )
-    
-    st.header("Hi, I am PennyPal! 🧞‍♂️💰")
-    user_question = st.text_input("Ask me a question about your finances.")
-    
+    # ... (your previous code)
+
     if user_question is not None and user_question != "":
         with get_openai_callback() as cb:
             output = sdf.chat(user_question)
-            if output:
-                if output['type'] == 'plot':
-                    img_path = output['value']
-                    st.image(img_path, caption='Your Plot', use_column_width=True)
+            # Debug: print the type and value of output
+            print(f"Type of output: {type(output)}")
+            print(f"Value of output: {output}")
+
+            # Check if output is a dictionary before accessing its elements
+            if isinstance(output, dict):
+                if 'type' in output and 'value' in output:
+                    if output['type'] == 'plot':
+                        img_path = output['value']
+                        st.image(img_path, caption='Your Plot', use_column_width=True)
+                    else:
+                        st.write(output['value'])
                 else:
-                    st.write(output['value'])
+                    st.write("Output does not contain 'type' or 'value'")
             else:
-                st.write("No output to display.")
+                st.write("Unexpected output format")
+                st.write(output)
 
 if __name__ == '__main__':
     main()
