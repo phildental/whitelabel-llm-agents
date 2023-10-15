@@ -1,11 +1,11 @@
 import pandas as pd
-from pandasai.llm import OpenAI
-from pandasai import SmartDataframe
 import requests
 import streamlit as st
+import os
+from pandasai.llm import OpenAI
+from pandasai import SmartDataframe
 from pandasai.responses.streamlit_response import StreamlitResponse
 from pandasai.helpers.openai_info import get_openai_callback
-import os
 from dotenv import load_dotenv
 
 
