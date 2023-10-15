@@ -70,9 +70,8 @@ df = dfnor[dfnor['hash'] != ""]
 
 
 def main():
-    llm = OpenAI(api_token=OPENAI_API_KEY, temperature=0)
-    streamlit_response_instance = StreamlitResponse()
-    sdf = SmartDataframe(df, config={"llm": llm, "enable_cache": False, "verbose": True, "conversational": True})
+    llm = OpenAI(api_token="sk-HolMxGSt5uDLwnzisUsssl9CoCco8FWcusg3mq5gk", temperature=0)
+    sdf = SmartDataframe(df, config={"llm": llm, "enable_cache": True, "verbose": True, "response_parser": StreamlitResponse, "max_retries": 10})
     st.set_page_config(
         page_title="You Personal Finance Assistant 🧞‍♂️",
         page_icon=":sales:",
@@ -81,19 +80,19 @@ def main():
     
     st.header("Hi, I am PennyPal! 🧞‍♂️💰")
     user_question = st.text_input("Ask me a question about your finances.")
+    
     if user_question is not None and user_question != "":
         with get_openai_callback() as cb:
             output = sdf.chat(user_question)
             if output:
-                # Based on the type of output, you might want to call different format methods
-                if 'type' in output and output['type'] == 'dataframe':
-                    streamlit_response_instance.format_dataframe(output['value'])
-                elif 'type' in output and output['type'] == 'plot':
-                    streamlit_response_instance.format_plot(output['value'])
+                if output['type'] == 'plot':
+                    img_path = output['value']
+                    st.image(img_path, caption='Your Plot', use_column_width=True)
                 else:
-                    streamlit_response_instance.format_other(output['value'])
+                    st.write(output['value'])
             else:
                 st.write("No output to display.")
 
 if __name__ == '__main__':
     main()
+
