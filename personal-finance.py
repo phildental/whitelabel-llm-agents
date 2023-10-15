@@ -3,7 +3,7 @@ import requests
 import streamlit as st
 import os
 import pandasai
-import StreamlitResponse
+from pandasai.responses.response_parser import ResponseParser
 from pandasai.llm import OpenAI
 from pandasai import SmartDataframe
 from pandasai.helpers.openai_info import get_openai_callback
