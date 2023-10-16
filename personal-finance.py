@@ -26,15 +26,21 @@ dfnor = pd.json_normalize(data)
 df = dfnor[dfnor['hash'] != ""]
 
 st.set_page_config(
-    page_title="Your Personal Finance Assistant 🧞‍♂️",
+    page_title="Penny Pal 🧞‍♂️",
     page_icon=":money_with_wings:",
     layout="centered"
 )
 
 def main():
-    st.markdown("<h1 style='text-align: center; color: #dcdcdc;'>Hi there! </h1> <h2>Welcome to PennyPal, your Personal Finance genius 🧞‍♂️💰</h2>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #dcdcdc;'>Hi there! </h1> <h2 style='text-align: center;'>💰 Welcome to PennyPal, your Personal Finance genius 🧞‍♂️</h2>", unsafe_allow_html=True)
     llm = OpenAI(api_token=OPENAI_API_KEY, temperature=0)
     sdf = SmartDataframe(df, config={"llm": llm, "verbose": True, "response_parser": StreamlitResponse, "max_retries": 5, "conversational": True, "enable_cache": False})
+
+    # Creating a button and checking if it is clicked
+    if st.button('Detailed Monthly Expenses'):
+        with get_openai_callback() as cb:
+            st.write(sdf.chat("Show me a table with monthly total of the column \"outcome\", grouped by the column \"category\". Order ASCENDING by month. Use one column for every category. Exclude columns where categories is: T10, S.I Systems, Policy Reporter, Transfers and CRA. Replace empty (NaN) values with 0. Make one additional columns with the sum of the categories columns."))
+            st.write(cb)
     
     user_question = st.text_input("Ask me anything about your personal finance.")
     if user_question is not None and user_question != "":
