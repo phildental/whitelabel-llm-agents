@@ -49,7 +49,7 @@ def main():
 
         if st.button('📊'):
             with get_openai_callback() as cb:
-                st.write(sdf.chat("Show me a graph with monthly total of the column \"outcome\", grouped by the column \"category\". Order ASCENDING by month. Use one axis for every category. Exclude columns where categories is: T10, S.I Systems, Policy Reporter, Transfers and CRA. Replace empty (NaN) values with 0. Make one additional axis with the sum of the categories columns. Make this axis thickness double the others."))
+                st.write(sdf.chat("Show me a graph with monthly total of the column \"outcome\", grouped by the column \"category\". Order ASCENDING by month. Use one axis for every category. Exclude columns where categories is: T10, S.I Systems, Policy Reporter, Transfers and CRA. Replace empty (NaN) values with 0. Make a second graph with the totals of 'outcome' and 'income'."))
                 st.write(cb)
     
     user_question = st.text_input("Ask me anything about your personal finance.")
