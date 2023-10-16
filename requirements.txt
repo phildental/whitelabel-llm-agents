@@ -68,6 +68,7 @@ marshmallow==3.19.0
 marshmallow-enum==1.5.1
 matplotlib
 matplotlib-inline
+matplotlib.pyplot
 mdurl==0.1.2
 mistune==2.0.5
 multidict==6.0.4
