@@ -49,7 +49,7 @@ def main():
 
         if st.button('📊'):
             with get_openai_callback() as cb:
-                st.write(sdf.chat("Show me a stacked bar chart with monthly total of the column \"outcome\", grouped by the column \"category\". Exclude rows where categories is: T10, S.I Systems, Policy Reporter, Transfers and CRA. Replace empty (NaN) values with 0. Filter results to month 6,7,8 and 9"))
+                st.write(sdf.chat("Show me a colored stacked bar chart with monthly total of the column \"outcome\", grouped by the column \"category\". Put legend outside the chart. Exclude rows where categories is: T10, S.I Systems, Policy Reporter, Transfers and CRA. Replace empty (NaN) values with 0. Filter results to month 6,7,8 and 9"))
                 st.write(cb)
     
     user_question = st.text_input("Ask me anything about your personal finance.")
