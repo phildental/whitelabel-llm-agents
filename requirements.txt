@@ -27,7 +27,6 @@ dataclasses-json==0.5.7
 debugpy==1.6.6
 decorator==5.1.1
 defusedxml==0.7.1
-duckdb==0.9.1
 entrypoints==0.4
 exceptiongroup==1.1.0
 executing==1.2.0
@@ -69,6 +68,7 @@ marshmallow==3.19.0
 marshmallow-enum==1.5.1
 matplotlib
 matplotlib-inline
+matplotlib.pyplot
 mdurl==0.1.2
 mistune==2.0.5
 multidict==6.0.4
