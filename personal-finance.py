@@ -10,6 +10,7 @@ from pandasai.helpers.openai_info import get_openai_callback
 import numpy as np
 import matplotlib.pyplot as plt
 import squarify
+import matplotlib.dates as mdates
 
 st.set_page_config(
     page_title="Penny Pal 🧞‍♂️",
@@ -49,7 +50,12 @@ if __name__ == '__main__':
     main()
 
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
-    datetime_columns = df.select_dtypes(['datetime64']).columns
+    # Assuming 'date' is the column with dates. Ensure it's in datetime format.
+    if 'date' in df.columns:
+        df['date'] = pd.to_datetime(df['date'])
+    else:
+        st.error("No 'date' column found in the DataFrame.")
+        return df
 
     # Filtering the "category" column
     if "category" in df.columns:
@@ -61,30 +67,37 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         )
         df = df[df["category"].isin(multi_select_values)]
 
-    # Filtering datetime columns
-    for column in datetime_columns:
-        min_date = df[column].min()
-        max_date = df[column].max()
+    # Filtering the date column
+    if 'date' in df.columns:
+        min_date = df['date'].min()
+        max_date = df['date'].max()
         date_values = st.date_input(
-            f"Select a date range for {column}",
-            (min_date, max_date)
+            "Select a date range",
+            [min_date.to_pydatetime().date(), max_date.to_pydatetime().date()],  # Convert to python date
+            min_value=min_date.to_pydatetime().date(),
+            max_value=max_date.to_pydatetime().date()
         )
-        df = df[(df[column] >= date_values[0]) & (df[column] <= date_values[1])]
+        if len(date_values) == 2:
+            # Convert the input dates to UTC to match the DataFrame's timezone
+            start_date = pd.to_datetime(date_values[0]).tz_localize('UTC')
+            end_date = pd.to_datetime(date_values[1]).tz_localize('UTC')
+            df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
 
     return df
+
 
 df_filtered = filter_dataframe(df)
 
 df2 = df
 
 # Ensure the date column is in datetime format
-df2['date'] = pd.to_datetime(df2['date'])
+#df2['date'] = pd.to_datetime(df2['date'])
 
 # Set the date as the index
 df2.set_index('date', inplace=True)
 
 # Resampling data monthly and summing it with numeric_only=True to avoid FutureWarning
-monthly_data = df2.resample('M').sum(numeric_only=True)
+monthly_data = df2
 
 # Plotting Time Series Analysis
 fig1, ax1 = plt.subplots(figsize=(10, 5))
@@ -152,7 +165,7 @@ df_cleaned = df_cleaned.groupby([df_cleaned.index, 'supplier']).sum().reset_inde
 df_cleaned.columns = ['Date', 'Supplier', 'Outcome', 'Income']
 
 # Format the date column
-#df_cleaned['Date'] = df_cleaned['Date'].dt.strftime('%B, %Y')
+df_cleaned['Date'] = df_cleaned['Date'].dt.strftime('%B, %Y')
 
 # Sort by 'Date' and then by 'Outcome'
 df_cleaned = df_cleaned.sort_values(by=['Date', 'Outcome'], ascending=[False, False])
@@ -214,5 +227,3 @@ with col3:
 # Plotting Expenses in the Last 3 Months
 with col4:
     st.pyplot(fig4)
-
-
