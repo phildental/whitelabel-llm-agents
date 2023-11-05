@@ -152,7 +152,7 @@ df_cleaned = df_cleaned.groupby([df_cleaned.index, 'supplier']).sum().reset_inde
 df_cleaned.columns = ['Date', 'Supplier', 'Outcome', 'Income']
 
 # Format the date column
-df_cleaned['Date'] = df_cleaned['Date'].dt.strftime('%B, %Y')
+#df_cleaned['Date'] = df_cleaned['Date'].dt.strftime('%B, %Y')
 
 # Sort by 'Date' and then by 'Outcome'
 df_cleaned = df_cleaned.sort_values(by=['Date', 'Outcome'], ascending=[False, False])
