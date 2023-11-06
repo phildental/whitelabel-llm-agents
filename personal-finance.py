@@ -89,16 +89,12 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 df_filtered = filter_dataframe(df)
 
 df2 = df
-
 # Ensure the date column is in datetime format
-#df2['date'] = pd.to_datetime(df2['date'])
-
+df2['date'] = pd.to_datetime(df2['date'])
 # Set the date as the index
 df2.set_index('date', inplace=True)
-
 # Resampling data monthly and summing it with numeric_only=True to avoid FutureWarning
-monthly_data = df2
-
+monthly_data = df2.resample('M').sum(numeric_only=True)
 # Plotting Time Series Analysis
 fig1, ax1 = plt.subplots(figsize=(10, 5))
 ax1.plot(monthly_data.index, monthly_data['income'], label='Income', color='green')
@@ -227,3 +223,5 @@ with col3:
 # Plotting Expenses in the Last 3 Months
 with col4:
     st.pyplot(fig4)
+
+
