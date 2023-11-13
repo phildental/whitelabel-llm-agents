@@ -44,8 +44,8 @@ def main():
             st.write(cb)
 
     centering_html = """
-    <div style='display: flex; justify-content: center; align-items: center; height: 100vh;'>
-        <iframe title='Personal Finance Dash v1' width='1920' height='1080' src='https://app.powerbi.com/reportEmbed?reportId=adad8aec-38ff-4f42-91d7-90b9061e5f36&autoAuth=true&ctid=f0e2941c-aaa2-4a03-963b-404d2c2888b6' frameborder='0' allowFullScreen='true'></iframe>
+    <div style='display: flex; justify-content: center; align-items: center; height: 135vh;'>
+        <iframe title='Personal Finance Dash v1' width='1920' height='1080' src='https://app.powerbi.com/reportEmbed?reportId=adad8aec-38ff-4f42-91d7-90b9061e5f36&autoAuth=true&ctid=f0e2941c-aaa2-4a03-963b-404d2c2888b6' frameborder='0' allowFullScreen='false'></iframe>
     </div>
     """
     st.markdown(centering_html, unsafe_allow_html=True)
