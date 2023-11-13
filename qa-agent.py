@@ -1,15 +1,5 @@
-from langchain import OpenAI, ConversationChain
-import os
-from dotenv import load_dotenv
+import pandas as pd
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Access the OPENAI_API_KEY
-api_key = os.getenv("OPENAI_API_KEY")
-
-llm = OpenAI(temperature=0.5)
-conversation = ConversationChain(llm=llm, verbose=True)
-
-output = conversation.predict(input="Ask something about anything")
-print(output)
+serie = [1,2,3,4,5,6,7,8,9,10]
+df = pd.DataFrame(serie)
+print(df)
